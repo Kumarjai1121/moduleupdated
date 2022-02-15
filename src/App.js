@@ -1,14 +1,20 @@
 
-import './App.css';
-import Todo from './todo';
-
+import "./App.css";
+import React from "react";
+import Connect from "./Connect";
 function App() {
-  return (
+  return(
     <div className="App">
-      
-    <Todo/>
+
+<Connect/>
+
     </div>
   );
+
+
 }
 
 export default App;
+
+
+

@@ -1,84 +1,66 @@
-import React from 'react';
-import { useState } from 'react/cjs/react.development';
+import React from "react";
+import { useState } from "react/cjs/react.development";
+import ListItems from "./components/ListItems";
+import AddItems from "./components/AddItems ";
+
 
 function Connect() {
- 
-  let[data,setData]=useState("")
+  let [userinfo, setUserInfo] = useState({ newItem: "", list: [] });
 
-  let [db , setDb]=useState([])
-  setData(Database)
-  
-  let Userlist = [
+  function EventHandler(e) {
+    setUserInfo({ ...userinfo, newItem: e.target.value });
+  }
 
-    {
-      id: 1,
-      name: 'Deepak',
-      technoloy: 'react'
-    },
-    {
-      id: 2,
-      name: 'Kamlesh',
-      technoloy: 'fultter'
-    },
-    {
-      id: 3,
-      name: 'Kartik',
-      technoloy: 'hacking'
+  const addItems = (newValue) => {
+    if (userinfo.newItem !== "") {
+      const inpTxt = {
+        id: Date.now(),
+        valuee: newValue,
+        isDone: false,
+      };
+      const list = [...userinfo.list];
+      list.push(inpTxt);
+      setUserInfo({ newItem: "", list });
     }
-    ,
-    {
-      id: 4,
-      name: 'Divyanshu',
-      technoloy: 'Angular'
+  };
+
+  const handleDelete = (id) => {
+    let lst = [...userinfo.list];
+    const updatedList = lst.filter((item) => item.id !== id);
+    setUserInfo({
+      ...userinfo,
+      list: updatedList,
+    });
+  };
+
+  const isChecked = (item, index) => {
+    if (userinfo.list[index].id === item.id) {
+      userinfo.list[index] = {
+        ...userinfo.list[index],
+        isDone: !userinfo.list[index].isDone,
+      };
     }
-]
-function EventHandler(e) {
-  setData(e.target.value);
-}
-const Database = db.filter((item)=>{
-  return( item.name.toLowercase().include(data.toLowercase()));
-})
-  return <div>
-    <input type="text"placeholder='Enter name...' onChange={EventHandler}/>
-  <table border="4">
+    setUserInfo({ ...userinfo, list: [...userinfo.list] });
+  };
 
-<tr>
-  <td>User ID</td>
-  <td>Name</td>
-  <td> Technology</td>
-</tr>
-
-
-{
-  Database.map((item)=>
-  
-  <tr>
-<td>{item.id}</td>
-<td>{item.name}</td>
-<td>{item.technoloy}</td>
-
-
-  </tr>
-  
-  
-  
-  )
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </table>
-  </div>;
+  return (
+    <div className="outer">
+      <div className="main">
+        <div className="div2">
+          <ol>
+            {
+              <ListItems
+                userinfo={userinfo}
+                isChecked={isChecked}
+                deleteItem={handleDelete}
+              />
+            }
+          </ol>
+        </div>
+        <AddItems inputText={EventHandler} addItems={addItems} userinfo={userinfo}/>
+      </div>
+    </div>
+  );
 }
 
 export default Connect;
